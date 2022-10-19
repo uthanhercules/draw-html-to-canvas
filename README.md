@@ -1,9 +1,9 @@
-## Draw HTML to Canvas
-Draw a HTML text template into a canvas context.
+## Render HTML to Canvas
+Render a HTML text template into a canvas context.
 
 ```js
 // To import
-const drawHTML = require('draw-html-to-canvas');
+const drawHTML = require('render-html-into-canvas');
 
 // To use
 const canvas = yourCanvas;
