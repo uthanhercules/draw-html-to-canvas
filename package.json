@@ -1,13 +1,16 @@
 {
   "name": "draw-html-to-canvas",
   "version": "1.0.0",
+  "author": {
+    "name": "Uthan Hercules",
+    "url": "https://github.com/uthanhercules/"
+  },
   "description": "Get a plain HTML and renders into a canvas.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["html", "canvas", "style"],
   "license": "ISC",
   "dependencies": {
     "canvas": "^2.10.1",
