@@ -7,7 +7,6 @@ function drawHTML(HTMLText, context, options) {
 
   context.font = `${options.fontSize}px ${options.fontFamily}`;
 
-  const sanitizedHtml = HTMLText.replace(/[\n\t]/gi, "").replace(/\s+/gi, " ");
   const textObject = createTextStyleObject(HTMLText);
   const wordSpacing = context.measureText(" ").width;
   const lineWidth = [];
@@ -31,7 +30,7 @@ function drawHTML(HTMLText, context, options) {
     }
 
     const totalSize = currentLineSize + wordWidth;
-    if (totalSize > context.canvas.width) {
+    if (totalSize > context.canvas.width - 32) {
       lineWidth.push(currentLineSize);
       currentLineSize = wordWidth;
     } else {
@@ -82,7 +81,7 @@ function drawHTML(HTMLText, context, options) {
 
     currentLineWidth += wordWidth;
 
-    if (currentLineWidth > context.canvas.width) {
+    if (currentLineWidth > context.canvas.width - 32) {
       positionX = 0;
       positionY += lineHeight;
       currentLine++;
