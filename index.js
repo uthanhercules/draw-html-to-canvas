@@ -2,6 +2,7 @@ function drawHTML(HTMLText, context, options) {
   if (!options) options = {};
   if (!options.fontFamily) options.fontFamily = "sans-serif";
   if (!options.fontSize) options.fontSize = 16;
+  if (!options.padding) options.padding = 32;
   if (!options.posX) options.posX = 0;
   if (!options.posY) options.posY = 0;
 
@@ -30,7 +31,7 @@ function drawHTML(HTMLText, context, options) {
     }
 
     const totalSize = currentLineSize + wordWidth;
-    if (totalSize > context.canvas.width - 32) {
+    if (totalSize > context.canvas.width - options.padding) {
       lineWidth.push(currentLineSize);
       currentLineSize = wordWidth;
     } else {
@@ -81,7 +82,7 @@ function drawHTML(HTMLText, context, options) {
 
     currentLineWidth += wordWidth;
 
-    if (currentLineWidth > context.canvas.width - 32) {
+    if (currentLineWidth > context.canvas.width - options.padding) {
       positionX = 0;
       positionY += lineHeight;
       currentLine++;

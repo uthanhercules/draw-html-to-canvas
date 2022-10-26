@@ -17,6 +17,7 @@ drawHTML(input, context, { fontFamily: 'Arial', fontSize: 24 }, canvas);
 options: {
   fontFamily: 'string',
   fontSize: number,
+  padding: number,
   posX: number,
   posY: number,
 }
