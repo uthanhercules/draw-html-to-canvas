@@ -7,6 +7,7 @@ function drawHTML(HTMLText, context, options) {
 
   context.font = `${options.fontSize}px ${options.fontFamily}`;
 
+  const sanitizedHtml = HTMLText.replace(/[\n\t]/gi, "").replace(/\s+/gi, " ");
   const textObject = createTextStyleObject(HTMLText);
   const wordSpacing = context.measureText(" ").width;
   const lineWidth = [];
@@ -14,6 +15,7 @@ function drawHTML(HTMLText, context, options) {
 
   let currentLine = 1;
   let currentLineSize = 0;
+
   textObject.forEach((word, index) => {
     context.font = createStyleString(
       word,
@@ -45,13 +47,26 @@ function drawHTML(HTMLText, context, options) {
   let positionX = options.posX;
   let positionY = options.posY;
 
-  textObject.forEach((word) => {
+  let underline = linemaker(context);
+  let lineThrough = linemaker(context);
+
+  const commitDrawLines = () => {
+    if (underline.isOpen()) {
+      underline.commit();
+    }
+    if (lineThrough.isOpen()) {
+      lineThrough.commit();
+    }
+  };
+
+  textObject.forEach((word, index) => {
     if (!word.value && !word.linebreak) return;
     if (word.linebreak) {
       positionX = 0;
       positionY += lineHeight;
       currentLine++;
       currentLineWidth = 0;
+      commitDrawLines();
       return;
     }
 
@@ -60,7 +75,11 @@ function drawHTML(HTMLText, context, options) {
       options.fontSize,
       options.fontFamily
     );
+
+    const measures = context.measureText(word.value);
+    const rawWordWidth = measures.width;
     const wordWidth = context.measureText(word.value).width + wordSpacing;
+
     currentLineWidth += wordWidth;
 
     if (currentLineWidth > context.canvas.width) {
@@ -68,6 +87,7 @@ function drawHTML(HTMLText, context, options) {
       positionY += lineHeight;
       currentLine++;
       currentLineWidth = wordWidth;
+      commitDrawLines();
     }
 
     const position = positionX;
@@ -78,12 +98,78 @@ function drawHTML(HTMLText, context, options) {
     const renderY = context.canvas.height / 2 + positionY;
 
     context.fillText(word.value, renderX, renderY);
+
+    if (word.underline) {
+      if (!underline.isOpen()) {
+        underline.open(renderX, renderY + 2);
+      } else {
+        underline.move(wordSpacing);
+      }
+
+      underline.move(rawWordWidth);
+
+      const nextWord = textObject[index + 1];
+
+      if (!nextWord || !nextWord.underline) {
+        underline.commit();
+      }
+    }
+
+    if (word.lineThrough) {
+      if (!lineThrough.isOpen()) {
+        lineThrough.open(renderX, renderY - options.fontSize * 0.25);
+      } else {
+        lineThrough.move(wordSpacing);
+      }
+
+      lineThrough.move(rawWordWidth);
+
+      const nextWord = textObject[index + 1];
+
+      if (!nextWord || !nextWord.lineThrough) {
+        lineThrough.commit();
+      }
+    }
   });
+}
+
+function linemaker(canvas, thickness = 1, color = "#000") {
+  let open = false;
+  let coords = { y: 0, startX: 0, endX: 0 };
+
+  return {
+    open(x = 0, y = 0) {
+      open = true;
+      coords = { y, startX: x, endX: x };
+    },
+
+    move(value) {
+      coords.endX += value;
+    },
+
+    isOpen() {
+      return open;
+    },
+
+    commit() {
+      if (!open) return;
+
+      canvas.beginPath();
+      canvas.strokeStyle = color;
+      canvas.lineWidth = thickness;
+      canvas.moveTo(coords.startX, coords.y);
+      canvas.lineTo(coords.endX, coords.y);
+      canvas.stroke();
+
+      open = false;
+    },
+  };
 }
 
 function createTextStyleObject(plainHTML) {
   const textData = createTextData(plainHTML);
   let output = [];
+
   function generateHTMLObject(current, context = {}) {
     if (current.node === "text") {
       output = [
@@ -101,6 +187,8 @@ function createTextStyleObject(plainHTML) {
       if (current.tag === "b" || current.tag === "strong") context.bold = true;
       if (current.tag === "i" || current.tag === "em") context.italic = true;
       if (current.tag === "br") output.push({ linebreak: true });
+      if (current.tag === "u") context.underline = true;
+      if (current.tag === "s") context.lineThrough = true;
     }
 
     if (current.child && current.child.length) {
