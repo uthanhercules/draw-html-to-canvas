@@ -1,10 +1,15 @@
 import { createTextStyleObject, createStyleString, linemaker } from './utils';
-import { IDrawHTMLOptions } from './types';
 
 const drawHTML = (
   HTMLText: string,
   context: CanvasRenderingContext2D,
-  options: IDrawHTMLOptions
+  options: {
+    fontFamily?: string;
+    fontSize?: number;
+    padding?: number;
+    posX?: number;
+    posY?: number;
+  }
 ) => {
   if (!options) options = {};
   if (!options.fontFamily) options.fontFamily = 'sans-serif';
