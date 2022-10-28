@@ -11,7 +11,7 @@ const context = canvas.getContext('2d');
 
 const input = "<b>Follow</b> the <i>train,</i> <b><i>CJ!</i></b><br><b>MOVE!</b>;
 
-drawHTML(input, context, { fontFamily: 'Arial', fontSize: 24 }, canvas);
+drawHTML(input, context, { fontFamily: 'Arial', fontSize: 16 });
 
 // Available options
 options: {
