@@ -1,11 +1,11 @@
-interface IHTMLJson {
+export interface IHTMLJson {
   node?: string;
   tag?: string;
   text?: string | undefined;
   child?: IHTMLJson[];
 }
 
-interface IHTMLObject {
+export interface IHTMLObject {
   value?: string;
   bold?: boolean;
   italic?: boolean;

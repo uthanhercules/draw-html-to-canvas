@@ -1,4 +1,4 @@
-interface IDrawHTMLOptions {
+export interface IDrawHTMLOptions {
   fontFamily?: string;
   fontSize?: number;
   padding?: number;

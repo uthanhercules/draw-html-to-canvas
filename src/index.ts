@@ -1,4 +1,5 @@
 import { createTextStyleObject, createStyleString, linemaker } from './utils';
+import { IDrawHTMLOptions } from './types';
 
 const drawHTML = (
   HTMLText: string,
@@ -150,4 +151,4 @@ const drawHTML = (
   });
 };
 
-module.exports = drawHTML;
+export default drawHTML;

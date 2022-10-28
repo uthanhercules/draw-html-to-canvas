@@ -1,4 +1,5 @@
 import { html2json as convertHTML } from 'html2json';
+import { IHTMLJson, IHTMLObject } from './types/utils'
 
 const createJsonFromHTML = (plainHTML: string) => {
   return convertHTML(plainHTML);
