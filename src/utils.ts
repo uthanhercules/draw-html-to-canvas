@@ -2,7 +2,8 @@ import { html2json as convertHTML } from 'html2json';
 import { IHTMLJson, IHTMLObject } from './types/utils';
 
 const createJsonFromHTML = (plainHTML: string) => {
-  return convertHTML(plainHTML);
+  const input = plainHTML.replace(/(<\/?)(\w+>)/gm, (_, $1, $2) => $1 + $2.toLowerCase());
+  return convertHTML(input);
 };
 
 const createStyleString = (
@@ -54,6 +55,7 @@ const createTextStyleObject = (plainHTML: string) => {
   }
 
   textData.forEach((node: IHTMLJson) => generateHTMLObject(node));
+  console.log(output)
   return output;
 };
 
