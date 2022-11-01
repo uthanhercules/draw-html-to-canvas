@@ -23,7 +23,6 @@ const drawHTML = (
   const wordSpacing = context.measureText(' ').width;
   const lineWidth: number[] = [];
   const lineHeight = options.fontSize * 1.4;
-  console.log(textObject);
   let currentLine = 1;
   let currentLineSize = 0;
 
